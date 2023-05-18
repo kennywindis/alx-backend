@@ -1,49 +1,44 @@
-#!/usr/bin/python3
-""" LFU Caching """
+#!/usr/bin/env python3
+"""100-lfu_cache module
+"""
 from base_caching import BaseCaching
-from collections import OrderedDict
 
 
 class LFUCache(BaseCaching):
-    """ Class that inherits from BaseCaching and is a caching system """
+    """LFUCache class
+    """
     def __init__(self):
+        """__init__ function
+        """
         super().__init__()
-        self.lru_cache = OrderedDict()
-        self.lfu_cache = {}
+        self.call = {}
 
     def put(self, key, item):
-        """ Assign to the dictionary, LFU algorithm """
-        if key in self.lru_cache:
-            del self.lru_cache[key]
-        if len(self.lru_cache) > BaseCaching.MAX_ITEMS - 1:
-            min_value = min(self.lfu_cache.values())
-            lfu_keys = [k for k, v in self.lfu_cache.items() if v == min_value]
-            if len(lfu_keys) == 1:
-                print("DISCARD:", lfu_keys[0])
-                self.lru_cache.pop(lfu_keys[0])
-                del self.lfu_cache[lfu_keys[0]]
+        """put function
+
+        Args:
+            key ([type]): [description]
+            item ([type]): [description]
+        """
+        if key and item:
+            self.cache_data[key] = item
+            if len(self.cache_data) > BaseCaching.MAX_ITEMS:
+                min_key = min(self.call, key=self.call.get)
+                print("DISCARD: {}".format(min_key))
+                del self.cache_data[min_key]
+                del self.call[min_key]
+            if key not in self.call.keys():
+                self.call[key] = 0
             else:
-                for k, _ in list(self.lru_cache.items()):
-                    if k in lfu_keys:
-                        print("DISCARD:", k)
-                        self.lru_cache.pop(k)
-                        del self.lfu_cache[k]
-                        break
-        self.lru_cache[key] = item
-        self.lru_cache.move_to_end(key)
-        if key in self.lfu_cache:
-            self.lfu_cache[key] += 1
-        else:
-            self.lfu_cache[key] = 1
-        self.cache_data = dict(self.lru_cache)
+                self.call[key] += 1
 
     def get(self, key):
-        """ Return the value linked """
-        if key in self.lru_cache:
-            value = self.lru_cache[key]
-            self.lru_cache.move_to_end(key)
-            if key in self.lfu_cache:
-                self.lfu_cache[key] += 1
-            else:
-                self.lfu_cache[key] = 1
-            return value
+        """get function
+
+        Args:
+            key ([type]): [description]
+        """
+        if key is None or key not in self.cache_data:
+            return None
+        self.call[key] += 1
+        return self.cache_data.get(key)
