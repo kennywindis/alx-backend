@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" implement a way to force a particular locale by passing the locale=fr parameter to app’s URLs """
+""" Basic Flask app, Basic Babel setup, Get locale from request,
+    Parametrize templates, Force locale with URL parameter """
 from flask import Flask, render_template, request
 from flask_babel import Babel, gettext
 
@@ -20,7 +21,7 @@ app.config.from_object(Config)
 
 
 @app.route('/')
-def one():
+def root():
     """ basic Flask app """
     return render_template("4-index.html")
 
