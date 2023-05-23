@@ -28,7 +28,7 @@ app.config.from_object(Config)
 
 
 @app.route('/')
-def root():
+def one():
     """ basic Flask app """
     return render_template("5-index.html")
 
