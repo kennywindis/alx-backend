@@ -1,14 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html dir="ltr" lang="en">
   <head>
-    <title>{{ gettext('home_title') }}</title>
+        <!-- HEAD -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,
+    initial-scale=1.0, viewport-fit=cover">
+    <title>{{ _('home_title') }}</title>
   </head>
   <body>
-    <h1>{{ gettext('home_header') }}</h1>
+        <!-- HEADER -->
+	<header>
+    <h1>{{ _('home_header') }}</h1>
     {% if g.user %}
-      <p>{{ gettext('logged_in_as', username=g.user.name) }}</p>
-    {% else %} 
-      <p>{{ gettext('not_logged_in') }}</p>
+    <p>{{ _('logged_in_as', username=g.user['name']) }}</p>
+    {% else %}
+    <p>{{ _('not_logged_in') }}</p>
     {% endif %}
+	</header>
   </body>
 </html>
